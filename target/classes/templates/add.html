@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<script src="js/jquery.min.js"></script>
+	<title>新增事項</title>
+</head>
+
+<body>
+	<div class="container">
+		<button type="button" class="btn btn-light" onClick="location.href='./index'">首頁</button>
+		<button type="button" class="btn btn-light" onClick="location.href='./add'">新增事項</button>
+		<h1><code>新增事項</code></h1>
+		<form action="#" th:action="@{/success}" th:object="${newbdata}" method="post"  enctype="multipart/form-data">
+
+			<div class="mb-3">
+				<h4>
+					<label for="Btitle" class="form-label">發佈標題　</label>
+					<input type="text" class="form-control" id="Btitle" th:field="*{title}" />
+				</h4>
+			</div><br>
+			<div class="mb-3">
+				<h4>
+					<label for="Bcontend" class="form-label">發佈內容　</label>
+					<textarea class="form-control" id="Bcontend" rows="10" cols="25" th:field="*{contend}" />
+				</h4>
+			</div><br>
+			<div class="mb-3">
+				<h4>
+					<label for="Bname" class="form-label">發佈人　　</label>
+					<input type="text" class="form-control" id="Bname" th:field="*{name}" />
+				</h4>
+			</div><br>
+			<div class="mb-3">
+				<h4>
+					<label for="Edate" class="form-label">結束日期　</label>
+					<input type="date" class="form-control" id="Edate" th:field="*{edate}" />
+				</h4>
+			</div><br>
+			<div class="mb-3">
+				<h4>
+					<label for="Sdate" class="form-label">發佈日期　</label>
+					<input readonly type="date" class="form-control" id="Sdate" th:field="*{sdate}" />
+				</h4>
+			</div><br>
+			<div class="file-loading">
+				<input id="fileinput-demo-0" name="mulUploadFile" type="file" multiple>
+			</div><br>
+			<div style="text-align:right">
+				<button type="button" style="width:120px;height:40px;font-size:20px;" class="btn btn-primary"
+					onClick="location.href='./index'">取消</button>
+				<button type="submit" style="width:120px;height:40px;font-size:20px;"
+					class="btn btn-primary">送出</button>
+			</div>
+		</form>
+	</div>
+
+
+	<script>
+		var date = new Date();
+		var day = date.getDate();
+		var month = date.getMonth() + 1;
+		var year = date.getFullYear();
+		if (month < 10) month = "0" + month;
+		if (day < 10) day = "0" + day;
+		var today = year + "-" + month + "-" + day;
+		document.getElementById("Sdate").value = today;
+	</script>
+
+	<script>
+		var date = new Date();
+		date.setDate(date.getDate() + 7);
+		var day = date.getDate();
+		var month = date.getMonth() + 1;
+		var year = date.getFullYear();
+		if (month < 10) month = "0" + month;
+		if (day < 10) day = "0" + day;
+		var today = year + "-" + month + "-" + day;
+		document.getElementById("Edate").value = today;
+	</script>
+
+</body>
+
+</html>

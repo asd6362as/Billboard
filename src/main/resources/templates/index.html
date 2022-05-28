@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>公佈欄</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-table.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-table.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<button type="button" class="btn btn-light" onClick="location.href='./index'">首頁</button>
+		<button type="button" class="btn btn-light" onClick="location.href='./add'">新增事項</button>
+		<h1><code>公佈欄</code></h1>
+		<table id="table"></table>
+	</div>
+
+	<script th:inline="javascript">
+		var result = [[${bdata}]];
+		$(function () {
+			load();
+		});
+		function load() {
+			$("#table").bootstrapTable({
+				data: result,
+				height: 600,
+				undefinedText: "_",           //當資料為 undefined 時顯示的字元。
+				sidePagination: 'client',
+				pagination: true,   //在表格底部顯示分頁工具欄  
+				striped: true,        //是否顯示行間隔色
+				pageNumber: 1, //當前第幾頁 
+				pageSize: 10, //每頁顯示的記錄數 
+				pageList: "[10, 20, 50, 100, 200]", //記錄數可選列表 
+				toolbar: "#toolbar",   //設定工具欄的Id或者class 
+				paginationPreText: "<<",
+				paginationNextText: ">>",
+				formatLoadingMessage: function () {
+					return "請稍等，正在載入中...";
+				},
+				columns: [{
+					field: 'id',
+					visible: false   //不顯示
+				}, {
+					field: 'detail',
+					title: '標題',
+					align: 'left',
+					//width: ,
+				}
+					, {
+					field: 'filequantity',
+					title: '附件數量',
+					align: 'left',
+					width: 70,
+				}
+					, {
+					field: 'sdate',
+					title: '發佈日期',
+					align: 'left',
+					width: 130,
+				}
+					, {
+					field: 'edate',
+					title: '結束日期',
+					align: 'left',
+					width: 130,
+				}
+					, {
+					field: 'name',
+					title: '發佈人',
+					align: 'left',
+					width: 150,
+				}
+					, {
+					field: 'operate',
+					title: '控制項',
+					align: 'left',
+					width: 100,
+				}
+
+				]
+			})
+		}
+	</script>
+
+</body>
+
+</html>
