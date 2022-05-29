@@ -6,7 +6,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public class NewFile {
@@ -30,10 +29,10 @@ public class NewFile {
 		path.delete();
 	}
 
-	public static void uploadfile(MultipartFile[] mulUploadFile, int id, File filePath) {
+	public static void uploadfile(MultipartFile[] mulUploadFile, int id, File filePath) throws UnsupportedEncodingException {
 		for (int i = 0; i < mulUploadFile.length; i++) {
-			String fileName = mulUploadFile[i].getOriginalFilename();
-			File file = new File(filePath + "\\" + fileName);
+			String fileName = new String((mulUploadFile[i].getOriginalFilename()).getBytes("utf-8"),"utf-8");
+			File file = new File(filePath + "/" + fileName);
 			try {
 				mulUploadFile[i].transferTo(file);
 			} catch (IOException e) {
@@ -43,7 +42,7 @@ public class NewFile {
 	}
 
 	public static void MakeZip(File filedir, int id) throws Exception {
-		File sourceFile = new File(filedir + "\\" + id);
+		File sourceFile = new File(filedir + "/" + id);
 		File zipFile = new File(sourceFile.getAbsolutePath() + ".zip");
 		FileOutputStream fos = new FileOutputStream(zipFile);
 		ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(fos));
@@ -73,7 +72,6 @@ public class NewFile {
 	}
 
 	private static void fileToZip(ZipOutputStream zos, File sourceFile, String path) throws Exception{
-		
 		if (sourceFile.isDirectory()){
 			path = path + sourceFile.getName()+"/";
 			ZipEntry zipEntry = new ZipEntry(path);
@@ -85,6 +83,7 @@ public class NewFile {
 		}else {
 			ZipEntry zipEntry = new ZipEntry(path + sourceFile.getName());
 			zos.putNextEntry(zipEntry);
+			
 			byte[] bufs = new byte[1024 * 10];
 			FileInputStream fis = new FileInputStream(sourceFile);
 			BufferedInputStream bis = new BufferedInputStream(fis,1024 * 10);

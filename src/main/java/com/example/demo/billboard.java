@@ -33,7 +33,7 @@ public class billboard {
 	@GetMapping(value = "/delete{id}")
 	public String delete(@PathVariable(value = "id") Integer id, Model model) {
 		bdata Deletebdata = bdataRespository.findById(id).get();
-		NewFile.deleteAll(new File("E:\\billboard\\File\\" + id));
+		NewFile.deleteAll(new File("/File/" + id));
 		bdataRespository.deleteById(id);
 		model.addAttribute("Deletebdata", Deletebdata);
 		return "delete";
@@ -55,19 +55,19 @@ public class billboard {
 
 	@GetMapping(value = "/download{id}")
 	public void download(@PathVariable(value = "id") Integer id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		File fileDir = new File("D:\\BillboardFile\\");
+		File fileDir = new File("/File/");
 		NewFile.MakeZip(fileDir, id);
-		File file = new File(fileDir + "\\" + id + ".zip");
+		File file = new File(fileDir + "/" + id + ".zip");
 		NewFile.DownloadZip(file, id, request, response);
 		file.delete();
 	}
 
 	@PostMapping("/success")
-	public String success(@ModelAttribute bdata newbdata, MultipartFile[] mulUploadFile, Model model) {
-		if (mulUploadFile[0].isEmpty()) newbdata.setFilequantity("無附件");
-		else newbdata.setFilequantity(mulUploadFile.length + "個檔案");
+	public String success(@ModelAttribute bdata newbdata, MultipartFile[] mulUploadFile, Model model) throws UnsupportedEncodingException {
+		if (mulUploadFile[0].isEmpty()) newbdata.setFilequantity(new String("無附件".getBytes("utf-8"),"utf-8"));
+		else newbdata.setFilequantity(new String((mulUploadFile.length+"個附件").getBytes("utf-8"),"utf-8"));
 		bdataRespository.save(newbdata);
-		File filedir = new File("D:\\BillboardFile\\" + newbdata.getId());
+		File filedir = new File("/File/" + newbdata.getId());
 		NewFile.deleteAll(filedir);
 		NewFile.NewF(filedir);
 		NewFile.uploadfile(mulUploadFile, newbdata.getId(), filedir);

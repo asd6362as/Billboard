@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(readOnly = false)
+@Query("SET NAMES UTF8")
 public interface BdataRespository extends JpaRepository<bdata, Integer> {
 	
 
