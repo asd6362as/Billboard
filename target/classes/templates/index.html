@@ -17,7 +17,7 @@
 		<button type="button" class="btn btn-light" onClick="location.href='./index'">首頁</button>
 		<button type="button" class="btn btn-light" onClick="location.href='./add'">新增事項</button>
 		<h1><code>公佈欄</code></h1>
-		<table id="table"></table>
+		<table id="table" data-sort-name="id" data-sort-order="desc"></table>
 	</div>
 
 	<script th:inline="javascript">
@@ -28,7 +28,6 @@
 		function load() {
 			$("#table").bootstrapTable({
 				data: result,
-				height: 600,
 				undefinedText: "_",           //當資料為 undefined 時顯示的字元。
 				sidePagination: 'client',
 				pagination: true,   //在表格底部顯示分頁工具欄  
@@ -44,7 +43,7 @@
 				},
 				columns: [{
 					field: 'id',
-					visible: false   //不顯示
+					visible: false, //不顯示
 				}, {
 					field: 'detail',
 					title: '標題',
