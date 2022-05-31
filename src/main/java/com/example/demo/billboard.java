@@ -1,6 +1,9 @@
 package com.example.demo;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,8 +29,27 @@ public class billboard {
 	@GetMapping(value = "/{id}")
 	public String detail(@PathVariable(value = "id") Integer id, Model model) {
 		bdata Detailbdata = bdataRespository.findById(id).get();
+		ArrayList<String> Filenamelist = new ArrayList<String>(
+				Arrays.asList(Detailbdata.getAllFileName().split("\\?")));
+		Filenamelist.remove(0);
+		Filenamelist.add("全部下載");
+		model.addAttribute("Filenamelist", Filenamelist);
 		model.addAttribute("Detailbdata", Detailbdata);
 		return "detail";
+	}
+	
+	@GetMapping("/add")
+	public String add(Model model) {
+		bdata newbdata = new bdata();
+		model.addAttribute("newbdata", newbdata);
+		return "add";
+	}
+	
+	@GetMapping(value = "/edit{id}")
+	public String edit(@PathVariable(value = "id") Integer id, Model model) {
+		bdata editbdata = bdataRespository.findById(id).get();
+		model.addAttribute("editbdata", editbdata);
+		return "edit";
 	}
 
 	@GetMapping(value = "/delete{id}")
@@ -39,33 +61,19 @@ public class billboard {
 		return "delete";
 	}
 
-	@GetMapping("/add")
-	public String add(Model model) {
-		bdata newbdata = new bdata();
-		model.addAttribute("newbdata", newbdata);
-		return "add";
-	}
-
-	@GetMapping(value = "/edit{id}")
-	public String edit(@PathVariable(value = "id") Integer id, Model model) {
-		bdata editbdata = bdataRespository.findById(id).get();
-		model.addAttribute("editbdata", editbdata);
-		return "edit";
-	}
-
-	@GetMapping(value = "/download{id}")
-	public void download(@PathVariable(value = "id") Integer id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		File fileDir = new File("/File/");
-		NewFile.MakeZip(fileDir, id);
-		File file = new File(fileDir + "/" + id + ".zip");
-		NewFile.DownloadZip(file, id, request, response);
-		file.delete();
-	}
-
 	@PostMapping("/success")
-	public String success(@ModelAttribute bdata newbdata, MultipartFile[] mulUploadFile, Model model) throws UnsupportedEncodingException {
-		if (mulUploadFile[0].isEmpty()) newbdata.setFilequantity(new String("無附件".getBytes("utf-8"),"utf-8"));
-		else newbdata.setFilequantity(new String((mulUploadFile.length+"個附件").getBytes("utf-8"),"utf-8"));
+	public String success(@ModelAttribute bdata newbdata, MultipartFile[] mulUploadFile, Model model)
+			throws UnsupportedEncodingException {
+		String AllFileName = "";
+		if (mulUploadFile[0].isEmpty())
+			newbdata.setFilequantity(new String("無附件".getBytes("utf-8"), "utf-8"));
+		else {
+			newbdata.setFilequantity(new String((mulUploadFile.length + "個附件").getBytes("utf-8"), "utf-8"));
+			for (int i = 0; i < mulUploadFile.length; i++) {
+				AllFileName = AllFileName + "?" + mulUploadFile[i].getOriginalFilename();
+			}
+		}
+		newbdata.setAllFileName(new String(AllFileName.getBytes("utf-8"), "utf-8"));
 		bdataRespository.save(newbdata);
 		File filedir = new File("/File/" + newbdata.getId());
 		NewFile.deleteAll(filedir);
@@ -74,5 +82,23 @@ public class billboard {
 		model.addAttribute("newbdata", newbdata);
 		return "success";
 	}
+
+	@GetMapping(value = "/download{id}/{FileName}")
+	public void download(@PathVariable("id") Integer id, @PathVariable(value = "FileName") String FileName,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String fileDir = "/File/";
+		if (FileName.equals("全部下載") ) {
+			File file = new File(fileDir + id + ".zip");
+			NewFile.Download(NewFile.MakeZip(new File(fileDir), id), file, request, response);
+			file.delete();
+
+		} else {
+			File file = new File(fileDir + id + "/" + FileName);
+			NewFile.Download(FileName, file, request, response);
+		}
+	}
+
+
+	
 
 }

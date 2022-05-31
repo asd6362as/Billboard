@@ -32,16 +32,19 @@
 			<h3>
 				<p th:text="'結束日期：'+ ${Detailbdata.edate}"></p>
 			</h3><br>
-			<div id="File" style="display:none;">
-				<h3><a th:href="@{'./download' + ${Detailbdata.id}}">附件下載</a></h3><br>
-			</div>
+			<h4><div id="File" th:each="i:${Filenamelist}">
+			    <span>附件下載：</span>
+				<a th:href="@{'./download'+ ${Detailbdata.id} + '/' + ${i}}" th:text="${i}"></a>
+			</div></h4>
+			<br>
+
 			<br><button type="button" style="width:120px;height:40px;font-size:20px;" class="btn btn-dark"
 				onClick="location.href='./index'">返回首頁</button>
 	</div>
 
 	<script type="text/javascript" th:inline="javascript">
-		if ([[${Detailbdata.Filequantity}]] != '無附件')
-			document.getElementById("File").style.display = "";
+		if ([[${Detailbdata.Filequantity}]] == '無附件')
+			document.getElementById("File").style.display = "none";
 	</script>
 
 </body>

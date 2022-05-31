@@ -16,6 +16,8 @@ public class bdata {
 	private String billboard_name;
 	private String billboard_contend;
 	private String Filequantity;
+	private String AllFileName;
+	
 
 	public bdata() {
 
@@ -75,6 +77,14 @@ public class bdata {
 
 	public void setFilequantity(String Filequantity) {
 		this.Filequantity = Filequantity;
+	}
+	
+	public String getAllFileName() {
+		return AllFileName;
+	}
+
+	public void setAllFileName(String AllFileName) {
+		this.AllFileName = AllFileName;
 	}
 
 	public String getdetail() {

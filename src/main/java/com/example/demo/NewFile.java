@@ -41,7 +41,7 @@ public class NewFile {
 		}
 	}
 
-	public static void MakeZip(File filedir, int id) throws Exception {
+	public static String MakeZip(File filedir, int id) throws Exception {
 		File sourceFile = new File(filedir + "/" + id);
 		File zipFile = new File(sourceFile.getAbsolutePath() + ".zip");
 		FileOutputStream fos = new FileOutputStream(zipFile);
@@ -49,16 +49,16 @@ public class NewFile {
 		fileToZip(zos, sourceFile, "");
 		zos.close();
 		fos.close();
-
+        return (id + ".zip");
 	}
-
-	public static void DownloadZip(File file, int id, HttpServletRequest request, HttpServletResponse response)
+	
+	public static void Download(String fillname,File File, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		String fileName = new String((id + ".zip").getBytes("UTF-8"), "ISO_8859_1");
+		fillname = new String(fillname.getBytes("UTF-8"), "ISO_8859_1");
 		response.setContentType("text/html;charset=utf-8");
 		response.addHeader("Content-Type", "application/octet-stream");
-		response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
-		try (InputStream in = new FileInputStream(file)) {
+		response.addHeader("Content-Disposition", "attachment;filename=" + fillname);
+		try (InputStream in = new FileInputStream(File)) {
 			OutputStream out = response.getOutputStream();
 			byte[] bytes = new byte[1024];
 			int len = 0;
@@ -70,6 +70,7 @@ public class NewFile {
 			out.close();
 		}
 	}
+
 
 	private static void fileToZip(ZipOutputStream zos, File sourceFile, String path) throws Exception{
 		if (sourceFile.isDirectory()){
@@ -95,6 +96,7 @@ public class NewFile {
 			fis.close();
 			}
 	}
+	
 
 
 }
