@@ -28,22 +28,22 @@
 		function load() {
 			$("#table").bootstrapTable({
 				data: result,
-				undefinedText: "_",           //當資料為 undefined 時顯示的字元。
+				undefinedText: "_",
 				sidePagination: 'client',
-				pagination: true,   //在表格底部顯示分頁工具欄  
-				striped: true,        //是否顯示行間隔色
-				pageNumber: 1, //當前第幾頁 
-				pageSize: 10, //每頁顯示的記錄數 
-				pageList: "[10, 20, 50, 100, 200]", //記錄數可選列表 
-				toolbar: "#toolbar",   //設定工具欄的Id或者class 
+				pagination: true,
+				striped: true,
+				pageNumber: 1,
+				pageSize: 10,
+				pageList: "[10, 20, 50, 100, 200]",
+				toolbar: "#toolbar",
 				paginationPreText: "<<",
 				paginationNextText: ">>",
 				formatLoadingMessage: function () {
-					return "請稍等，正在載入中...";
+					return "Loading...";
 				},
 				columns: [{
 					field: 'id',
-					visible: false, //不顯示
+					visible: false,
 				}, {
 					field: 'detail',
 					title: '標題',
@@ -80,7 +80,6 @@
 					align: 'left',
 					width: 100,
 				}
-
 				]
 			})
 		}

@@ -21,7 +21,7 @@ public class billboard {
 
 	@GetMapping("/index")
 	public String BillboardIndex(Model model) {
-		bdataRespository.deleteByedate(DeleteEnddata.today());
+		bdataRespository.deleteByedate(today.get());
 		model.addAttribute("bdata", bdataRespository.findAll());
 		return "index";
 	}
@@ -62,18 +62,8 @@ public class billboard {
 	}
 
 	@PostMapping("/success")
-	public String success(@ModelAttribute bdata newbdata, MultipartFile[] mulUploadFile, Model model)
-			throws UnsupportedEncodingException {
-		String AllFileName = "";
-		if (mulUploadFile[0].isEmpty())
-			newbdata.setFilequantity(new String("無附件".getBytes("utf-8"), "utf-8"));
-		else {
-			newbdata.setFilequantity(new String((mulUploadFile.length + "個附件").getBytes("utf-8"), "utf-8"));
-			for (int i = 0; i < mulUploadFile.length; i++) {
-				AllFileName = AllFileName + "?" + mulUploadFile[i].getOriginalFilename();
-			}
-		}
-		newbdata.setAllFileName(new String(AllFileName.getBytes("utf-8"), "utf-8"));
+	public String success(@ModelAttribute bdata newbdata, MultipartFile[] mulUploadFile, Model model) throws UnsupportedEncodingException {
+		newbdata = NewFile.FileNameSet(mulUploadFile, newbdata);
 		bdataRespository.save(newbdata);
 		File filedir = new File("/File/" + newbdata.getId());
 		NewFile.deleteAll(filedir);

@@ -40,17 +40,6 @@ public class NewFile {
 			}
 		}
 	}
-
-	public static String MakeZip(File filedir, int id) throws Exception {
-		File sourceFile = new File(filedir + "/" + id);
-		File zipFile = new File(sourceFile.getAbsolutePath() + ".zip");
-		FileOutputStream fos = new FileOutputStream(zipFile);
-		ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(fos));
-		fileToZip(zos, sourceFile, "");
-		zos.close();
-		fos.close();
-        return (id + ".zip");
-	}
 	
 	public static void Download(String fillname,File File, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
@@ -70,7 +59,17 @@ public class NewFile {
 			out.close();
 		}
 	}
-
+	
+	public static String MakeZip(File filedir, int id) throws Exception {
+		File sourceFile = new File(filedir + "/" + id);
+		File zipFile = new File(sourceFile.getAbsolutePath() + ".zip");
+		FileOutputStream fos = new FileOutputStream(zipFile);
+		ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(fos));
+		fileToZip(zos, sourceFile, "");
+		zos.close();
+		fos.close();
+        return (id + ".zip");
+	}
 
 	private static void fileToZip(ZipOutputStream zos, File sourceFile, String path) throws Exception{
 		if (sourceFile.isDirectory()){
@@ -80,7 +79,6 @@ public class NewFile {
 			for (File file : sourceFile.listFiles()){
 			fileToZip(zos,file,path);
 			}
-		
 		}else {
 			ZipEntry zipEntry = new ZipEntry(path + sourceFile.getName());
 			zos.putNextEntry(zipEntry);
@@ -97,6 +95,17 @@ public class NewFile {
 			}
 	}
 	
-
-
+	public static bdata FileNameSet(MultipartFile[] mulUploadFile, bdata newbdata) throws UnsupportedEncodingException {
+		String AllFileName = "";
+		if (mulUploadFile[0].isEmpty())
+			newbdata.setFilequantity(new String("無附件".getBytes("utf-8"), "utf-8"));
+		else {
+			newbdata.setFilequantity(new String((mulUploadFile.length + "個附件").getBytes("utf-8"), "utf-8"));
+			for (int i = 0; i < mulUploadFile.length; i++) {
+				AllFileName = AllFileName + "?" + mulUploadFile[i].getOriginalFilename();
+			}
+		}
+		newbdata.setAllFileName(new String(AllFileName.getBytes("utf-8"), "utf-8"));
+		return newbdata;
+	}
 }

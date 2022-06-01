@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = false)
 
 public interface BdataRespository extends JpaRepository<bdata, Integer> {
-	
 
-    @Modifying
-    @Query("delete from bdata where end_date < ?1")
-    void deleteByedate(Date edate);
+	@Modifying
+	@Query("delete from bdata where end_date < ?1")
+	void deleteByedate(Date edate);
 }

@@ -96,10 +96,6 @@ public class bdata {
 				+ "\"> 刪除 </a>";
 	}
 
-	public String getdownload() {
-		return "<a href=\".\\download" + billboard_id + "\"> 下載 </a>";
-	}
-
 	@Override
 	public String toString() {
 		return "{" + "\"bid\":" + billboard_id + ", \"btitle\":\"" + billboard_title + "\"" + ", \"sdate\":\""
